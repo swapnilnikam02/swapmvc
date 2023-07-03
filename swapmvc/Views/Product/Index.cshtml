@@ -1,0 +1,54 @@
+﻿@model IEnumerable<swapmvc.Models.Product>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+@Html.ActionLink("Create New", "Create")
+<table border="1">
+    <tr>
+        <th>ProductId</th>
+        <th>ProductName</th>
+        <th>categoryid</th>
+        <th>Categoryname</th>
+
+    </tr>
+    @{
+        foreach (var item in Model)
+        {
+        <tr>
+            <td>@item.ProductId</td>
+            <td>@item.ProductName</td>
+            <td>
+                @item.CategoryId
+            </td>
+            <td>@item.Category.CategoryName</td>
+            <td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.CategoryId }) |
+              
+                @Html.ActionLink("Delete", "Delete", new { id = item.CategoryId })
+            </td>
+            </td>
+        </tr>
+        }
+    }
+    <div>
+        Page @(ViewBag.PageNumber) of @Math.Ceiling((decimal)ViewBag.TotalItems / ViewBag.PageSize)
+
+        @if (ViewBag.PageNumber > 1)
+        {
+            @Html.ActionLink("<<", "Index", new { page = 1 }, new { @class = "btn btn-default" })
+            @Html.ActionLink("<", "Index", new { page = ViewBag.PageNumber - 1 }, new { @class = "btn btn-default" })
+        }
+
+        @if (ViewBag.PageNumber < Math.Ceiling((decimal)ViewBag.TotalItems / ViewBag.PageSize))
+        {
+            @Html.ActionLink(">", "Index", new { page = ViewBag.PageNumber + 1 }, new { @class = "btn btn-default" })
+            @Html.ActionLink(">>", "Index", new { page = Math.Ceiling((decimal)ViewBag.TotalItems / ViewBag.PageSize) }, new { @class = "btn btn-default" })
+        }
+    </div>
+
+</table>
+
