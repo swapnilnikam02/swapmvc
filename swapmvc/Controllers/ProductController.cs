@@ -46,7 +46,7 @@ namespace swapmvc.Controllers
             {
                 db.Products.Add(p);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("List");
             }
 
             ViewBag.CategoryId = new SelectList(db.Categories, "CategoryId", "CategoryName", p.CategoryId);
@@ -73,7 +73,7 @@ namespace swapmvc.Controllers
             {
                 db.Entry(product).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("List");
             }
 
             ViewBag.Categories = new SelectList(db.Categories, "CategoryId", "CategoryName", product.CategoryId);
@@ -84,28 +84,10 @@ namespace swapmvc.Controllers
         public ActionResult Delete(int id)
         {
             var del = db.Products.Where(model => model.ProductId == id).FirstOrDefault();
-            return View(del);
+            db.Products.Remove(del);
+            db.Entry(del).State = EntityState.Deleted;
+            db.SaveChanges();
+            return RedirectToAction("List");
         }
-
-        // POST: Category/Delete/5
-        [HttpPost, ActionName("Delete")]
-       
-        public ActionResult Delete(Product c)
-        {
-            db.Entry(c).State = EntityState.Deleted;
-
-            int a = db.SaveChanges();
-            if (a > 0)
-            {
-                ViewBag.Deletemsg = "<script>alert('Data delete')</script>";
-            }
-            else
-            {
-                ViewBag.Deletemsg = "<script>alert('Data not delete')</script>";
-            }
-            //return RedirectToAction("Index");
-            return View();
-        }
-
     }
 }

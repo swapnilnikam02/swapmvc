@@ -26,7 +26,7 @@ namespace swapmvc.Controllers
         {
             db.Categories.Add(c);
             db.SaveChanges();
-            return View();
+            return RedirectToAction("Index");
         }
         public ActionResult Edit(int id)
         {
@@ -40,37 +40,24 @@ namespace swapmvc.Controllers
             int a=db.SaveChanges();
             if(a>0)
             {
-                ViewBag.updatemsg = "<script>alert('Data update')</script>";
+                ViewBag.updatemsg = "<script>alert('Category has updated sucessfully.')</script>";
                 ModelState.Clear();
             }
             else
             {
 
-                ViewBag.updatemsg = "<script>alert('Data not update')</script>";
+                ViewBag.updatemsg = "<script>alert('Category has not updated.')</script>";
             }
-            return View();
+            return RedirectToAction("Index");
         }
         public ActionResult Delete(int id)
         {
             var del=db.Categories.Where(model=>model.CategoryId == id).FirstOrDefault();
-            return View(del);
-        }
-        [HttpPost]
-        public ActionResult Delete(Category c)
-        {
-            db.Entry(c).State = EntityState.Deleted;
-            
-            int a=db.SaveChanges();
-            if(a>0)
-            {
-                ViewBag.Deletemsg= "<script>alert('Data delete')</script>";
-            }
-            else
-            {
-                ViewBag.Deletemsg = "<script>alert('Data not delete')</script>";
-            }
-            //return RedirectToAction("Index");
-            return View();
+            db.Categories.Remove(del);
+            db.Entry(del).State = EntityState.Deleted;
+            db.SaveChanges();
+            return RedirectToAction("Index");
+
         }
     }
 }
